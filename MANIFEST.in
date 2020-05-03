@@ -1,0 +1,26 @@
+# MANIFEST.in
+# Control the files included or not in the source distribution
+# For further information, see
+# https://packaging.python.org/guides/using-manifest-in/
+
+# Mandatory files
+include LICENSE CHANGELOG
+
+# Source code, including tests
+graft tests
+
+# Data files
+graft my_devops_package/data
+
+# Development tools
+include Makefile
+include .pre-commit-config.yaml
+include .coveragerc
+include pytest.ini
+
+# Skip ci/cd-specific files
+exclude .gitlab-ci.yml
+
+# Temporary files
+global-exclude *.py[cod] __pycache__
+global-exclude .*.swp *.*~

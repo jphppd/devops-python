@@ -1,0 +1,56 @@
+repos:
+  - repo: https://github.com/jphppd/pre-commit-hooks.git
+    rev: 0.0.1
+    hooks:
+      - id: git-check-mailmap
+      - id: git-forbid-binary
+      - id: git-check
+      - id: git-check-added-large-files
+      - id: git-check-merge-conflict
+      - id: generic-check-byte-order-marker
+      - id: generic-check-case-conflict
+      - id: generic-check-executables-have-shebangs
+      - id: generic-check-symlinks
+      - id: generic-check-vcs-permalinks
+      - id: generic-detect-private-key
+      - id: generic-end-of-file-fixer
+      - id: generic-trailing-whitespace
+      - id: generic-crlf-forbid
+      - id: generic-crlf-remove
+      - id: generic-tabs-forbid
+      - id: generic-tabs-remove
+      - id: generic-nbsp-forbid
+      - id: generic-nbsp-remove
+      - id: generic-en-dashes-forbid
+      - id: generic-en-dashes-remove
+      - id: jinja-lint
+      - id: json-check-syntax
+      - id: json-pretty-format
+      - id: markdown-lint
+      - id: python-check-ast
+      - id: python-check-builtin-literals
+      - id: python-check-docstring-first
+      - id: python-debug-statements
+      - id: python-double-quote-string-fixer
+      - id: python-fix-encoding-pragma
+      - id: python-requirements-txt-fixer
+      - id: python-safetydb
+      - id: python-pyupgrade
+      - id: python-yapf
+      - id: python-pylint
+      - id: python-pydocstyle
+      - id: python-bandit
+        args:
+          - --exclude=tests
+      - id: rst-linter
+      - id: shell-check-syntax
+      - id: shell-check
+      - id: shell-script-must-have-extension
+      - id: shell-script-must-not-have-extension
+      - id: shell-format
+      - id: shell-bashate
+      - id: shell-beautysh
+      - id: toml-check-syntax
+      - id: xml-check-syntax
+      - id: yaml-check-syntax
+      - id: yaml-yamllint
