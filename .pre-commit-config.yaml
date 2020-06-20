@@ -1,10 +1,19 @@
+---
+# https://pre-commit.com/
+# Install pre-commit for your current user:
+#   pip3 install --user pre-commit
+#
+# and then, in the git repo:
+#   pre-commit install
+
 repos:
   - repo: https://github.com/jphppd/pre-commit-hooks.git
-    rev: 0.0.1
+    rev: 0.0.4
     hooks:
       - id: git-check-mailmap
       - id: git-forbid-binary
       - id: git-check
+      - id: git-dirty
       - id: git-check-added-large-files
       - id: git-check-merge-conflict
       - id: generic-check-byte-order-marker
@@ -37,6 +46,7 @@ repos:
       - id: python-safetydb
       - id: python-pyupgrade
       - id: python-yapf
+      - id: python-pylint-config
       - id: python-pylint
       - id: python-pydocstyle
       - id: python-bandit
@@ -47,7 +57,6 @@ repos:
       - id: shell-check
       - id: shell-script-must-have-extension
       - id: shell-script-must-not-have-extension
-      - id: shell-format
       - id: shell-bashate
       - id: shell-beautysh
       - id: toml-check-syntax
