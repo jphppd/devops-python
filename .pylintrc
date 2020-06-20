@@ -51,6 +51,12 @@ unsafe-load-any-extension=no
 # all. Valid levels: HIGH, INFERENCE, INFERENCE_FAILURE, UNDEFINED.
 confidence=
 
+# Enable the message, report, category or checker with the given id(s). You can
+# either give multiple identifier separated by comma (,) or put this option
+# multiple time (only on the command line, not in the configuration file where
+# it should appear only once). See also the "--disable" option for examples.
+enable=all
+
 # Disable the message, report, category or checker with the given id(s). You
 # can either give multiple identifiers separated by comma (,) or put this
 # option multiple times (only on the command line, not in the configuration
@@ -64,13 +70,8 @@ disable=locally-disabled,
         suppressed-message,
         fixme,
         import-error,
-        bad-continuation
-
-# Enable the message, report, category or checker with the given id(s). You can
-# either give multiple identifier separated by comma (,) or put this option
-# multiple time (only on the command line, not in the configuration file where
-# it should appear only once). See also the "--disable" option for examples.
-enable=all
+        bad-continuation,
+        bad-whitespace,
 
 
 [REPORTS]
@@ -174,8 +175,6 @@ function-naming-style=snake_case
 good-names=i,
            j,
            k,
-           ex,
-           Run,
            _
 
 # Good variable names regexes, separated by a comma. If names match any regex,
@@ -186,7 +185,7 @@ good-names-rgxs=
 include-naming-hint=no
 
 # Naming style matching correct inline iteration names.
-inlinevar-naming-style=any
+inlinevar-naming-style=snake_case
 
 # Regular expression matching correct inline iteration names. Overrides
 # inlinevar-naming-style.
