@@ -8,7 +8,7 @@
 
 repos:
   - repo: https://github.com/jphppd/pre-commit-hooks.git
-    rev: 0.0.5
+    rev: 0.0.10
     hooks:
       - id: git-check-mailmap
       - id: git-forbid-binary
@@ -16,6 +16,7 @@ repos:
       - id: git-dirty
       - id: git-check-added-large-files
       - id: git-check-merge-conflict
+      - id: git-commit-msg
       - id: generic-check-byte-order-marker
       - id: generic-check-case-conflict
       - id: generic-check-executables-have-shebangs
@@ -45,13 +46,16 @@ repos:
       - id: python-requirements-txt-fixer
       - id: python-safetydb
       - id: python-pyupgrade
+      - id: python-isort-config
+      - id: python-isort-seed-config
+      - id: python-isort
       - id: python-black
       - id: python-pylint-config
       - id: python-pylint
       - id: python-pydocstyle
       - id: python-bandit
-        args:
-          - --exclude=tests
+        exclude: ^tests/
+      - id: python-setup-cfg-fmt
       - id: rst-linter
       - id: shell-check-syntax
       - id: shell-check
