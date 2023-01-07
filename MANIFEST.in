@@ -7,6 +7,7 @@
 include LICENSE CHANGELOG
 
 # Source code, including tests
+graft my_devops_package
 graft tests
 
 # Data files
@@ -14,11 +15,13 @@ graft my_devops_package/data
 
 # Development tools
 include Makefile
-include .pre-commit-config.yaml
+include .isort.cfg
+include .pylintrc
 include .coveragerc
 include pytest.ini
 
 # Skip ci/cd-specific files
+exclude .pre-commit-config.yaml
 exclude .gitlab-ci.yml
 
 # Temporary files

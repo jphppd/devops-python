@@ -16,6 +16,6 @@ def test_resource():
 
 
 def test_fail_resource():
-    """Assert the content of the resource."""
+    """Anti-assert the content of the resource."""
     with pytest.raises(AssertionError):
         assert app.JSON_RESOURCE == {'key1': 'value1', 'key2': 'value1'}

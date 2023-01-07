@@ -1,9 +1,17 @@
-"""Package devops entry point."""
+"""
+Initialization of the module.
 
-from pkg_resources import get_distribution, DistributionNotFound
+This file is executed once, when the module is imported. This is also true when calling the module
+in command-line (see __main__.py).
 
-try:
-    # The name must be the same as the value of the "name" key in the setup.py file
-    __version__ = get_distribution(__package__).version
-except DistributionNotFound:
-    pass
+This file may contain some code, whose purpose is to initialize some variables, etc.
+Argument parsing, and more generally, cli interactions must be put in __main__.py though.
+"""
+
+from importlib import metadata
+
+# __package__ is described here https://docs.python.org/3/reference/import.html#__package__
+__version__ = metadata.version(__package__)
+
+# If possible, avoid global variables. It tends to make the code messy.
+COMMON_VARIABLE = "COMMON_VARIABLE_initial_value"
