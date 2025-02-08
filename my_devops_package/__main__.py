@@ -3,12 +3,13 @@ Entry point of the module.
 
 This file is meant to be the entry point of the package:
     python -m my_devops_package arg1 arg2 ...
-The -m argument instructs python to look for, and execute, __main__.py in my_devops_package.
+The -m argument instructs python to look for, and execute, __main__.py
+in my_devops_package.
 
-In order to keep the code structured and maintainable, handle your (command line) arguments in
-this file only. Try to pass explicit arguments in the subsequent function calls rather, than the
-raw result of parse_args(). Conversely, try to keep explicit argument names in your functions:
-testing will be all the easier.
+In order to keep the code structured and maintainable, handle your (command line)
+arguments in this file only. Try to pass explicit arguments in the subsequent function
+calls rather, than the raw result of parse_args(). Conversely, try to keep explicit
+argument names in your functions: testing will be all the easier.
 """
 
 import argparse
@@ -33,7 +34,10 @@ def parse_args():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--config", default=Path("config.json"), help="path to the configuration file", type=Path
+        "--config",
+        default=Path("config.json"),
+        help="path to the configuration file",
+        type=Path,
     )
     args = parser.parse_args()
 
@@ -44,15 +48,16 @@ def parse_args():
 
 def main():
     """Entry point of the package."""
-    init_logging("package.log")
+    config = parse_args()
+
+    init_logging("package.log", debug_to_stdout=sys.stdin.isatty())
     logging.info("COMMON_VARIABLE: %s", my_devops_package.COMMON_VARIABLE)
 
     print_yaml()
     print_resource()
-
-    config = parse_args()
     logging.info("__package__: %s", __package__)
     logging.info("__name__: %s", __name__)
+    logging.info("version: %s", my_devops_package.__version__)
     logging.info("config: %s", config)
     logging.info("COMMON_VARIABLE: %s", my_devops_package.COMMON_VARIABLE)
 

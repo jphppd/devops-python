@@ -21,9 +21,7 @@ The layout is the following:
 │   └── test_main.py
 ├── CHANGELOG
 ├── LICENSE
-├── MANIFEST.in
-├── README.md
-└── Makefile
+└── README.md
 ```
 
 Here are some explanations:
@@ -38,18 +36,11 @@ Here are some explanations:
 * `tests` contain the tests of the package;
 * `CHANGELOG` lists the modifications made between the releases (versions);
 * `LICENSE` contains the license of the code (who is allowed to do what);
-* `MANIFEST.in` lists the files to be included (or excluded) in the source
-  distribution ([see the syntax](
-  https://packaging.python.org/guides/using-manifest-in/));
-* `setup.cfg` describes the package. It includes the metadata (name, version,
+* `pyproject.toml` describes the package. It includes the metadata (name, version,
   author, etc.), the dependencies (other python modules), and some options
   for the tools involved in the development process (see more
   [in the documentation](
-  https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files));
-* `setup.py` is the script, relying on `setuptools`, responsible for
-  packaging and/or building the package;
-* `Makefile`, associated with the software `make`, calls various commands
-  during the build process.
+  https://packaging.python.org/en/latest/guides/writing-pyproject-toml)).
 
 ## Workflow
 
@@ -59,20 +50,16 @@ Here are some explanations:
 
 Make sure the following tools are available on your computer:
 
-* [make](https://www.gnu.org/software/make/), a tool which controls the
-  development workflow;
 * [pip](https://pip.pypa.io/en/stable/), the package installer for Python;
-* [pew](https://github.com/berdario/pew), a virtual environment manager for
-  Python;
+* [uv](https://docs.astral.sh/uv/), a package and project manager for Python;
 * [pre-commit](https://pre-commit.com/), a framework for managing (git)
    pre-commit hooks.
 
 On Debian, you can install those dependencies with:
 
 ```sh
-sudo apt-get install make python3-pip
-pip3 install --user pip
-pip3 install --user pew pre-commit
+sudo apt-get install python3-pip
+pip3 install --user pip uv pre-commit
 ```
 
 #### The python package manager
@@ -104,77 +91,41 @@ with other (virtual) environments. Hence, working on project A and B can be
 done at the same time, and it is highly recommended to work with virtual
  environments.
 
-Several venv manager exists. Among them, [`pew`](https://github.com/berdario/pew)
-is easy to use:
+Several venv manager exists. [uv](https://docs.astral.sh/uv/)
+makes `venvs` easy to use: you basically only need to prefix your commands with
+`uv run`.
 
-* `pew ls` lists the existing venvs;
-* `pew new <my_name>` creates a new venv;
-* `pew rm <my_name>` removes an existing venv (delete the files);
-* `pew workon <my_name>` "activates" the venv, that is, allows one to work
-  within the venv; commands like `pip` will install the dependencies in that
-  particular environment;
-* `pew in <my_name> <some_command>` runs `<some_command>` in the venv without
-  activating it.
-
-For further information, [read the documentation](https://github.com/berdario/pew#command-reference).
-
-In the following documentation, working inside a virtual environment is
-indicated with:
-
-```sh
-(venv) $ run-some-command
-```
-
-#### Bootstrap the project
-
-In order to boostrap the project (i.e. to get everything in order to work
-), simply run `make bootstrap`:
-
-* if you are in a previously created venv, it will install all the dependencies,
-  including development-dependencies (which are required for the development
-  process but not for the runtime, like tests and packaging libraries);
-* otherwise, it will suggest to create a new venv whose name is based on the
-  current path. Once created, run `make bootstrap` a second time.
+For further information,
+[read the documentation](https://docs.astral.sh/uv/getting-started/features/#projects).
 
 ### Development
-
-During the development process, you must always work within the venv.
 
 #### Dependencies management
 
 It is high likely that the project depends on several external libraries, called
-dependencies. Those are stored in `setup.cfg`:
+dependencies. Those are stored in `pyproject.toml`:
 
-* runtime dependencies are listed under `install_requires` in the `[options]`
-  section; those are dependencies that must be present on the target system
+* runtime dependencies are dependencies that must be present on the target system
   (where the package will be used) to work properly;
-* additional development dependencies (tests, packaging, etc.) are listed under
- `dev=` in the `[options.extras_require]`, and installed alongside required
-  dependencies by specifying the `[dev]` extra marker.
+* development dependencies (tests, packaging, etc.) are only needed for the development
+  of the project.
 
-To install the dependencies, either run `make bootstrap`, or `pip install -e .`,
- or `pip install -e .[dev]`.
-
-Avoid installing dependencies directly with `pip install <some_deps>`: the
-synchronisation with `setup.cfg` is not automatic.
+Dependencies can be installed and added to `pyproject.toml` thanks to the commands
+`uv add <my-dep>` and/or `uv add --dev <my-dep>`.
 
 #### Quality checks
 
-`make quality`, which run a few checks, should be run on a regular basis.
+Linters are static analysis softwares, which can detect a number of errors in
+the code, before the execution, and thus makes it possible to measure the
+quality.
 
-### Releasing a new version
+A popular linter (as well as formatter) for Python is [`ruff`](https://docs.astral.sh/ruff/).
+The pre-commit configuration enforces its use. The problems identified by these
+software must be corrected, except when there is a (really) relevant argument
+against them.
 
-When the new functionality is ready, and the code clean, it's time to create a
-new release. [`zest`](https://zestreleaser.readthedocs.io/en/latest/) is in
-charge of the process:
-
-* make sure your code is in clean state;
-* fill the `CHANGELOG` file, if not already done;
-* run `make release` (this will trigger `zest`), and follow the instructions.
-
-`zest` will take care of creating the git tag, updating the version in
-`setup.cfg`
-as well as the changelog.
+Once installed, `ruff` can also be called with `uv run ruff check --fix` and `uv run ruff format`.
+You do not need to prefix the command with `uv run` if the tool is installed globally.
 
 ## Packaging
 
@@ -186,57 +137,41 @@ There are two common way of packaging a Python project:
 * a binary ("wheel") distribution, containing the "runtime" code and some
   metadata (the version, the dependencies), but not the tests (for instance).
 
-Run `make package` to create both distributions.
-
-## Coding and naming conventions
-
-The conventions of Python are gathered in the [PEP 8](https://www.python.org/dev/peps/pep-0008/).
-The package [pycodestyle](https://pycodestyle.readthedocs.io/en/latest)
-verifies compliance with these conventions by the code.
-
-## Linters
-
-Linters are static analysis softwares, which can detect a number of errors in
-the code, before the execution, and thus makes it possible to measure the
-quality.
-
-A popular linter for Python is [pylint](https://www.pylint.org/). The
-pre-commit configuration enforces their use. The problems identified by these
-software must be corrected, except when there is a (really) relevant argument
-against them.
+Run `uv build` to create both distributions in the `dist` directory.
 
 ## Pre-commit
 
-The package pydocstyle, pylint and other python conventions can be checked
-automatically thanks to [pre-commit](https://pre-commit.com/). This tool adds a
-git-hook in the repository, called automatically before each `commit`
-operation. The hook executes instructions listed in a `.pre-commit-config.yaml`
-file, provided by the developper
-(see [this example](./.pre-commit-config.yaml)), and put at the root-level of
-the git directory.
+The quality of the project can be ensured thanks to
+[pre-commit](https://pre-commit.com/),
+a tool that adds a git-hook in the repository, called automatically before each `commit`.
+
+The hook executes instructions listed in a `.pre-commit-config.yaml` file,
+provided by the developper (see [this example](./.pre-commit-config.yaml)),
+and put at the root-level of the git directory.
+
 When run, the tool will mark all lines that are not rule-compliant and outline
 the reason and the source of the problem.
 
 To install pre-commit (for your user), run
 
 ```sh
-    $ pip3 install --user pre-commit
+    pip3 install --user pre-commit
 ```
 
 In order to create the hook, the following command must be run in the git
-repository. The `clone` operation will download `.pre-commit-config.yaml` if it
-exists, but will not create the hook.
+repository. The `git clone` operation will download `.pre-commit-config.yaml` if it
+exists in the repository, but will not create the hook.
 
 ```sh
-    $ pre-commit install
+    pre-commit install
 ```
 
 Once installed, to call the tool manually (rather than relying on the "hook"
 aspect), you can use
 
 ```sh
-    $ pre-commit run --files <file1> <file2> ...
-    $ pre-commit run --all-files
+    pre-commit run --files <file1> <file2> ...
+    pre-commit run --all-files
 ```
 
 ## Unit tests
@@ -246,14 +181,14 @@ application meets its design and behaves as intended. To run the tests
 manually, execute
 
 ```sh
-(venv) $ pytest
+uv run pytest
 ```
 
 For further information on the unit tests one can use the commands:
 
 ```
-(venv) $ pytest -v
-(venv) $ pytest -vv
+uv run pytest -v
+uv run pytest -vv
 ```
 
 The unit tests are saved in a seperate folder `/tests` containing all tests and
@@ -271,41 +206,35 @@ operation, we interact with the jupyter server via a web browser.
 ### Installation of Jupyter
 
 ```sh
-(venv) $ pip3 install jupyter jupyter_contrib_nbextensions
+uv add jupyter jupyter_contrib_nbextensions
 ```
 
 Some packages commonly used with `Jupyter` are:
 
-* `numpy`, `scipy`, `pandas` (numerical tools)
-* `plotly`, `matplotlib` (graphical libraries)
-* `psycopg2-binary` (database connector)
-* `peewee` (ORM database)
-* `shapely` (manipulation of geometric objects: lines, segments, polygons)
-* `pyproj` (map projections conversion)
-* `autopep8` (automatic formatting)
-* `colorlover` (color bank for visualization)
+* `numpy`, `scipy`, `polars` (numerical tools)
+* `plotly`, `matplotlib`, `hvplot` (graphics libraries)
+* `colorcet`, `colorlover` (color bank for visualization)
 
 ### Installation of jupyter extensions
 
 It is possible to add Jupyter extensions with the module nbextension:
 
 ```sh
-(venv) $ jupyter contrib nbextension install --user
-(venv) $ jupyter nbextensions_configurator enable
-(venv) $ jupyter nbextension enable <extension>
+uv run jupyter contrib nbextension install --user
+uv run jupyter nbextensions_configurator enable
+uv run jupyter nbextension enable <extension>
 ```
 
 Extension examples:
 
 * `codefolding/main` (hides some of the code to make the page lighter)
-* `code_prettify/autopep8` (formatting following pep8)
 * `execute_time/ExecuteTime` (display of execution time)
 
 #### Launching the application
 
 ```sh
-(venv) $ jupyter notebook
-(venv) $ jupyter notebook --no-browser
+uv run jupyter notebook
+uv run jupyter notebook --no-browser
 ```
 
 In both cases, these commands provide a URL to access the service. In the first
@@ -313,32 +242,6 @@ case, a browser is launched (desirable in the local case), in the second case
 it is not (desirable in the remote case).
 
 URL example: `http://localhost:8888/?token=7c35e29aacf2019572b4c526496bfa21b8b0218fd9206d66`.
-
-### Remote access
-
-By default, Jupyter only allows local connections (with a client on the
-server). To access it from a remote station, the procedure is as follows.
-
-#### Creation of a configuration file
-
-```sh
-(venv) $ jupyter notebook --generate-config
-```
-
-This command creates `~/.jupyter/jupyter_notebook_config.py`
-
-#### Modification of the default configuration
-
-To allow access to the service from any extension, you must change the
-`c.NotebookApp.ip` parameter configuration file (by default, it is present but
-commented), and put either `'*'`, or `'<server address>'`. Two examples:
-
-```sh
-c.NotebookApp.ip = '*'
-```
-
-Depending on the case, the server address in the proposed URL to connect to the
-service may require modification.
 
 #### Changing the notebook size
 

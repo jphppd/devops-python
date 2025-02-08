@@ -2,17 +2,17 @@
 
 import json
 import logging
+from importlib import resources
 
 import yaml
-from pkg_resources import resource_filename, resource_string
 
 import my_devops_package
 
 # Get the absolute path of the resource
-JSON_PATH = resource_filename(__package__, "data/data.json")
+JSON_PATH = resources.files(__package__) / "data" / "data.json"
 
 # Get the content of the specified resource as a bytes object
-RESOURCE_BYTES = resource_string(__name__, "data/data.json")
+RESOURCE_BYTES = JSON_PATH.read_bytes()
 JSON_RESOURCE = json.loads(RESOURCE_BYTES.decode())
 
 

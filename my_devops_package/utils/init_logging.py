@@ -2,7 +2,6 @@
 
 import logging
 import logging.handlers
-import sys
 
 
 def get_handlers(log_file: str):
@@ -16,10 +15,14 @@ def get_handlers(log_file: str):
 
     debug_handler = logging.StreamHandler()
 
-    log_format = "%(asctime)s|%(levelname)s|%(module)s|%(funcName)s:%(lineno)s|%(message)s"
+    log_format = (
+        "%(asctime)s|%(levelname)s|%(module)s|%(funcName)s:%(lineno)s|%(message)s"
+    )
     log_formatter = logging.Formatter(log_format)
 
-    debug_formatter = logging.Formatter("%(module)s|%(funcName)s:%(lineno)s|%(message)s")
+    debug_formatter = logging.Formatter(
+        "%(module)s|%(funcName)s:%(lineno)s|%(message)s"
+    )
     debug_handler.setFormatter(debug_formatter)
     debug_handler.setLevel("DEBUG")
 
@@ -31,7 +34,7 @@ def get_handlers(log_file: str):
     }
 
 
-def init_logging(log_name: str, debug_to_stdout=sys.stdin.isatty()):
+def init_logging(log_name: str, debug_to_stdout=False):
     """
     Configure logging.
 

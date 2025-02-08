@@ -1,11 +1,11 @@
 """
 Initialization of the module.
 
-This file is executed once, when the module is imported. This is also true when calling the module
-in command-line (see __main__.py).
+This file is executed once, when the module is imported.
+This is also true when calling the module in command-line (see __main__.py).
 
 This file may contain some code, whose purpose is to initialize some variables, etc.
-Argument parsing, and more generally, cli interactions must be put in __main__.py though.
+Argument parsing, and more generally, cli interactions must be put in __main__.py.
 """
 
 from importlib import metadata
